@@ -158,9 +158,9 @@ This project is licensed under the MIT License — see the [LICENSE](./LICENSE) 
 **Azizkhan Nurlanov**
 
 - Website: [azizkhan.dev](https://azizkhan.dev)
-- GitHub: [@AzizKhanC](https://github.com/AzizKhanC)
-- LinkedIn: [azizkhan-nurlanov](https://linkedin.com/in/azizkhan-nurlanov)
-- Telegram: [@khan7414](https://t.me/khan7414)
+- GitHub: [@Hanchik8](https://github.com/Hanchik8)
+- LinkedIn: [azizkhan-nurlanov-382135345](https://www.linkedin.com/in/azizkhan-nurlanov-382135345/)
+- Telegram: [@Hanchik_8](https://t.me/Hanchik_8)
 
 ---
 
