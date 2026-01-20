@@ -1,0 +1,1484 @@
+You're right - my previous patch had formatting issues with accidental spaces. Let me provide a clean, apply-ready refactor. 
+
+---
+
+# 🔧 Corrected Refactor Plan
+
+## Summary of Changes
+
+### Files to DELETE
+- `src/App.css` (unused Vite boilerplate)
+
+### Files to ADD
+| File | Purpose |
+|------|---------|
+| `vitest.config.ts` | Test configuration |
+| `prettier.config.js` | Code formatting |
+| `.prettierignore` | Prettier ignore patterns |
+| `.editorconfig` | Editor settings |
+| `.env.example` | Environment template |
+| `.github/workflows/ci.yml` | CI pipeline |
+| `src/test/setup. ts` | Test setup |
+| `src/content/siteConfig. ts` | Site configuration |
+| `src/content/projects.ts` | Portfolio data |
+| `src/content/services.ts` | Services data |
+| `src/components/ThemeProvider.tsx` | Theme context |
+| `src/components/ThemeToggle.tsx` | Dark mode toggle |
+| `src/components/Services.tsx` | Services section |
+| `src/components/About.tsx` | About section |
+| `src/components/Contact. tsx` | Contact form |
+| `src/__tests__/Navigation.test.tsx` | Navigation tests |
+| `src/__tests__/Projects.test.tsx` | Projects tests |
+| `src/__tests__/Contact.test.tsx` | Contact form tests |
+| `docs/. gitkeep` | Docs folder placeholder |
+
+### Files to MODIFY
+| File | Changes |
+|------|---------|
+| `package.json` | Fix name, scripts, trim deps |
+| `vite.config.ts` | Remove lovable-tagger |
+| `README.md` | Complete rewrite |
+| `src/index.css` | Add light mode variables |
+| `src/App.tsx` | Add ThemeProvider, remove unused |
+| `src/pages/Index.tsx` | Add new sections |
+| `src/components/Navigation.tsx` | Add theme toggle, improve a11y |
+| `src/components/Hero.tsx` | Use siteConfig |
+| `src/components/Projects.tsx` | Use typed data |
+| `src/components/Skills.tsx` | Minor fixes |
+| `src/components/Footer.tsx` | Use siteConfig |
+| `src/components/ui/sonner.tsx` | Fix theme import |
+
+---
+
+# 📦 Complete Patch
+
+## Root Configuration Files
+
+```json name=package.json
+{
+  "name": "azizkhan-dev-studio",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Portfolio website for Azizkhan Nurlanov - Backend Developer",
+  "author": "Azizkhan Nurlanov",
+  "license": "MIT",
+  "scripts": {
+    "dev":  "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format":  "prettier --write \"src/**/*.{ts,tsx,css,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,css,json}\"",
+    "test":  "vitest run",
+    "test:watch": "vitest",
+    "test: coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hookform/resolvers":  "^3.10.0",
+    "@radix-ui/react-dialog": "^1.1.14",
+    "@radix-ui/react-dropdown-menu": "^2.1.15",
+    "@radix-ui/react-label": "^2.1.7",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-toast": "^1.2.14",
+    "@radix-ui/react-tooltip": "^1.2.7",
+    "class-variance-authority":  "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.462.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.61.1",
+    "sonner": "^1.7.4",
+    "tailwind-merge": "^2.6.0",
+    "tailwindcss-animate":  "^1.0.7",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.32.0",
+    "@testing-library/jest-dom": "^6.6.0",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/node": "^22.16.5",
+    "@types/react": "^18.3.23",
+    "@types/react-dom":  "^18.3.7",
+    "@vitejs/plugin-react-swc": "^3.11.0",
+    "autoprefixer":  "^10.4.21",
+    "eslint": "^9.32.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^15.15.0",
+    "jsdom": "^20.0.3",
+    "postcss": "^8.5.6",
+    "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.6",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.38.0",
+    "vite": "^5.4.19",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+```
+
+```typescript name=vite.config.ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react-swc";
+import path from "path";
+
+export default defineConfig({
+  server: {
+    host: "::",
+    port: 8080,
+  },
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  build: {
+    sourcemap: true,
+  },
+});
+```
+
+```typescript name=vitest.config.ts
+import { defineConfig } from "vitest/config";
+import react from "@vitejs/plugin-react-swc";
+import path from "path";
+
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: ["./src/test/setup. ts"],
+    include: ["src/**/*.{test,spec}.{ts,tsx}"],
+  },
+  resolve:  {
+    alias:  {
+      "@":  path.resolve(__dirname, "./src"),
+    },
+  },
+});
+```
+
+```javascript name=prettier.config.js
+/** @type {import('prettier').Config} */
+export default {
+  semi: true,
+  singleQuote: false,
+  tabWidth: 2,
+  trailingComma:  "es5",
+  printWidth: 100,
+  plugins: ["prettier-plugin-tailwindcss"],
+};
+```
+
+```text name=. prettierignore
+dist
+node_modules
+*. min.js
+*. min.css
+package-lock.json
+```
+
+```text name=.editorconfig
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 2
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.md]
+trim_trailing_whitespace = false
+```
+
+```text name=.env.example
+# Environment Variables
+# Copy this file to .env and fill in your values
+
+# Site URL (for SEO)
+VITE_SITE_URL=https://azizkhan. dev
+```
+
+```yaml name=. github/workflows/ci.yml
+name: CI
+
+on: 
+  push: 
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix: 
+        node-version: [18. x, 20.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name:  Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run:  npm ci
+
+      - name: Check formatting
+        run:  npm run format:check
+
+      - name:  Lint
+        run: npm run lint
+
+      - name: Type check
+        run:  npm run typecheck
+
+      - name: Run tests
+        run:  npm test
+
+      - name:  Build
+        run: npm run build
+```
+
+````markdown name=README.md
+# Azizkhan's Dev Studio
+
+A modern, responsive portfolio website showcasing my work as a Backend Developer specializing in Java & Microservices.
+
+## ✨ Features
+
+- **Modern Stack**: React 18, TypeScript, Vite, Tailwind CSS
+- **Responsive Design**: Mobile-first, works on all devices
+- **Dark/Light Mode**: System preference detection with manual toggle
+- **Accessible**:  Keyboard navigation, ARIA labels, focus states
+- **Fast**:  Optimized Vite build
+- **Contact Form**: Validated with react-hook-form + zod
+
+## 🛠️ Tech Stack
+
+| Category | Technologies |
+|----------|-------------|
+| Framework | React 18 |
+| Language | TypeScript |
+| Build Tool | Vite |
+| Styling | Tailwind CSS |
+| Components | shadcn/ui (Radix UI) |
+| Forms | React Hook Form + Zod |
+| Icons | Lucide React |
+| Testing | Vitest + React Testing Library |
+| CI/CD | GitHub Actions |
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm 9+
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/Hanchik8/azizkhan-s-dev-studio.git
+cd azizkhan-s-dev-studio
+
+# Install dependencies
+npm ci
+
+# Start development server
+npm run dev
+```
+
+The site will be available at `http://localhost:8080`
+
+### Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run preview` | Preview production build |
+| `npm run lint` | Run ESLint |
+| `npm run format` | Format code with Prettier |
+| `npm run test` | Run tests |
+| `npm run typecheck` | TypeScript type checking |
+
+## 📁 Project Structure
+
+```
+src/
+├── components/          # React components
+│   ├── ui/             # shadcn/ui components
+│   ├── Navigation.tsx  # Site navigation
+│   ├── Hero.tsx        # Hero section
+│   ├── Services.tsx    # Services section
+│   ├── Projects.tsx    # Portfolio projects
+│   ├── Skills.tsx      # Technical skills
+│   ├── About.tsx       # About section
+│   ├── Contact.tsx     # Contact form
+│   └── Footer.tsx      # Site footer
+├── content/            # Data files
+│   ├── projects.ts     # Portfolio data
+│   ├── services.ts     # Services data
+│   └── siteConfig.ts   # Site configuration
+├── hooks/              # Custom React hooks
+├── lib/                # Utility functions
+├── pages/              # Page components
+├── test/               # Test setup
+└── __tests__/          # Test files
+```
+
+## 🚢 Deployment
+
+### Vercel
+
+1. Push to GitHub
+2. Import project in Vercel
+3. Deploy automatically
+
+### Netlify
+
+1. Connect repository
+2. Build command: `npm run build`
+3. Publish directory: `dist`
+
+## 📄 License
+
+MIT License
+
+## 👤 Author
+
+**Azizkhan Nurlanov**
+
+- GitHub: [@Hanchik8](https://github.com/Hanchik8)
+- LinkedIn: [Azizkhan Nurlanov](https://www.linkedin.com/in/azizkhan-nurlanov-382135345/)
+- Telegram: [@Hanchik_8](https://t.me/Hanchik_8)
+````
+
+```text name=docs/.gitkeep
+```
+
+## Test Setup
+
+```typescript name=src/test/setup.ts
+import "@testing-library/jest-dom";
+```
+
+## Content Files
+
+```typescript name=src/content/siteConfig.ts
+export const siteConfig = {
+  name: "Azizkhan Nurlanov",
+  title: "Backend Developer",
+  tagline: "Java & Microservices Specialist",
+  description: 
+    "Backend Developer specializing in Spring Boot, High-Load Systems, and Security.  Building scalable microservices architectures with modern Java.",
+  url: "https://azizkhan.dev",
+  email: "Azizkhan1232281@gmail.com",
+  location: "Bishkek, Kyrgyzstan",
+  social: {
+    github: "https://github.com/Hanchik8",
+    linkedin: "https://www.linkedin.com/in/azizkhan-nurlanov-382135345/",
+    telegram: "https://t.me/Hanchik_8",
+  },
+  status: "Open to Work",
+} as const;
+
+export type SiteConfig = typeof siteConfig;
+```
+
+```typescript name=src/content/projects.ts
+import { Server, Crown, Folder, type LucideIcon } from "lucide-react";
+
+export interface Project {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  techStack: string[];
+  highlights: string[];
+  icon: LucideIcon;
+  github?:  string;
+  demo?: string;
+  featured:  boolean;
+}
+
+export const projects: Project[] = [
+  {
+    id:  "megasegashop",
+    title:  "MegaSegaShop",
+    subtitle: "Microservices E-Commerce Platform",
+    description: 
+      "Full-featured e-commerce platform built on microservices architecture with Spring Boot 3 and Spring Cloud.  Demonstrates modern approaches to distributed systems development.",
+    techStack: [
+      "Java 21",
+      "Spring Boot 3.3",
+      "Spring Cloud",
+      "PostgreSQL",
+      "Redis",
+      "Apache Kafka",
+      "Docker",
+    ],
+    highlights:  [
+      "9 Microservices Architecture",
+      "Saga Pattern with Compensating Transactions",
+      "Event-Driven Architecture via Kafka",
+      "CQRS Pattern Implementation",
+      "Pessimistic Locking for Race Conditions",
+      "JWT Authentication via API Gateway",
+    ],
+    icon: Server,
+    github:  "https://github.com/Hanchik8/MegaSegaShop_MicroServices",
+    featured: true,
+  },
+  {
+    id: "web-chess",
+    title:  "Web Chess",
+    subtitle: "Full-Stack Chess Application",
+    description: 
+      "Full-featured web application for playing chess with registration, authorization, and user statistics. Backend on Java Spring Boot with Spring Security, frontend on HTML/CSS/Vanilla JS.",
+    techStack: ["Java", "Spring Boot", "Spring Security", "PostgreSQL", "JavaScript", "HTML/CSS"],
+    highlights: [
+      "Custom Remember Me Implementation",
+      "HttpOnly Cookie Security",
+      "JWT Token Authentication",
+      "Full Chess Game Logic",
+      "Move Validation & Check/Checkmate",
+      "Interactive Board with Highlights",
+    ],
+    icon: Crown,
+    github: "https://github.com/Hanchik8/FSD_Project",
+    featured: true,
+  },
+  {
+    id: "file-explorer",
+    title:  "Desktop File Explorer",
+    subtitle: "MVC-Based System Tool",
+    description: 
+      "Desktop application for file management built with Java Swing/AWT following MVC architecture pattern.",
+    techStack:  ["Java", "Swing", "AWT", "MVC Pattern"],
+    highlights: [
+      "Recursive File Search",
+      "File Manipulation Logic",
+      "MVC Architecture",
+      "Cross-Platform Desktop App",
+    ],
+    icon:  Folder,
+    github: "https://github.com/Hanchik8/File_Explorer_Java",
+    featured:  false,
+  },
+];
+
+export const getFeaturedProjects = (): Project[] => projects.filter((p) => p.featured);
+export const getAllProjects = (): Project[] => projects;
+```
+
+```typescript name=src/content/services.ts
+import { Server, Shield, Database, Zap, type LucideIcon } from "lucide-react";
+
+export interface Service {
+  id:  string;
+  title: string;
+  description: string;
+  icon: LucideIcon;
+  features: string[];
+}
+
+export const services:  Service[] = [
+  {
+    id: "backend-development",
+    title:  "Backend Development",
+    description: 
+      "Building robust, scalable backend systems with Java and Spring Boot. RESTful APIs, authentication, and business logic implementation.",
+    icon: Server,
+    features: [
+      "RESTful API Design",
+      "Spring Boot Applications",
+      "Database Integration",
+      "Business Logic Implementation",
+    ],
+  },
+  {
+    id: "microservices",
+    title: "Microservices Architecture",
+    description: 
+      "Designing and implementing distributed systems with microservices patterns, event-driven architecture, and inter-service communication.",
+    icon:  Zap,
+    features: [
+      "Service Decomposition",
+      "Event-Driven Design",
+      "API Gateway Setup",
+      "Service Discovery",
+    ],
+  },
+  {
+    id:  "database-design",
+    title:  "Database Design",
+    description:
+      "Designing efficient database schemas, optimizing queries, and implementing caching strategies for high-performance applications.",
+    icon: Database,
+    features: ["Schema Design", "Query Optimization", "Redis Caching", "Data Migration"],
+  },
+  {
+    id: "security",
+    title: "Security Implementation",
+    description: 
+      "Implementing secure authentication and authorization using JWT, OAuth2, and Spring Security best practices.",
+    icon: Shield,
+    features: [
+      "JWT Authentication",
+      "OAuth2 Integration",
+      "Role-Based Access",
+      "Security Auditing",
+    ],
+  },
+];
+```
+
+## Theme Components
+
+```typescript name=src/components/ThemeProvider.tsx
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+
+type Theme = "dark" | "light" | "system";
+
+interface ThemeContextType {
+  theme:  Theme;
+  setTheme: (theme: Theme) => void;
+  resolvedTheme: "dark" | "light";
+}
+
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+
+const STORAGE_KEY = "azizkhan-dev-theme";
+
+function getSystemTheme(): "dark" | "light" {
+  if (typeof window === "undefined") return "dark";
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const [theme, setThemeState] = useState<Theme>(() => {
+    if (typeof window === "undefined") return "system";
+    return (localStorage.getItem(STORAGE_KEY) as Theme) || "system";
+  });
+
+  const resolvedTheme = theme === "system" ? getSystemTheme() : theme;
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root. classList.remove("light", "dark");
+    root.classList.add(resolvedTheme);
+  }, [resolvedTheme]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme:  dark)");
+    const handleChange = () => {
+      if (theme === "system") {
+        const root = document. documentElement;
+        root.classList.remove("light", "dark");
+        root.classList.add(getSystemTheme());
+      }
+    };
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, [theme]);
+
+  const setTheme = (newTheme: Theme) => {
+    setThemeState(newTheme);
+    localStorage.setItem(STORAGE_KEY, newTheme);
+  };
+
+  return (
+    <ThemeContext.Provider value={{ theme, setTheme, resolvedTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+export function useTheme() {
+  const context = useContext(ThemeContext);
+  if (context === undefined) {
+    throw new Error("useTheme must be used within a ThemeProvider");
+  }
+  return context;
+}
+```
+
+```typescript name=src/components/ThemeToggle.tsx
+import { Moon, Sun, Monitor } from "lucide-react";
+import { useTheme } from "./ThemeProvider";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+export function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-9 w-9 rounded-lg border border-border hover:border-primary/50 hover:bg-primary/5"
+          aria-label="Toggle theme"
+        >
+          <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="border-border bg-card">
+        <DropdownMenuItem onClick={() => setTheme("light")} className="cursor-pointer">
+          <Sun className="mr-2 h-4 w-4" />
+          <span>Light</span>
+          {theme === "light" && <span className="ml-auto text-primary">✓</span>}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("dark")} className="cursor-pointer">
+          <Moon className="mr-2 h-4 w-4" />
+          <span>Dark</span>
+          {theme === "dark" && <span className="ml-auto text-primary">✓</span>}
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("system")} className="cursor-pointer">
+          <Monitor className="mr-2 h-4 w-4" />
+          <span>System</span>
+          {theme === "system" && <span className="ml-auto text-primary">✓</span>}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+```
+
+## Updated Core Components
+
+```typescript name=src/App.tsx
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import Index from "./pages/Index";
+
+const App = () => (
+  <ThemeProvider>
+    <TooltipProvider>
+      <Index />
+    </TooltipProvider>
+  </ThemeProvider>
+);
+
+export default App;
+```
+
+```typescript name=src/pages/Index.tsx
+import Navigation from "@/components/Navigation";
+import Hero from "@/components/Hero";
+import Services from "@/components/Services";
+import Projects from "@/components/Projects";
+import Skills from "@/components/Skills";
+import About from "@/components/About";
+import Contact from "@/components/Contact";
+import Terminal from "@/components/Terminal";
+import Footer from "@/components/Footer";
+
+const Index = () => {
+  return (
+    <div className="min-h-screen bg-background">
+      <Navigation />
+      <main>
+        <Hero />
+        <Services />
+        <Projects />
+        <Skills />
+        <About />
+        <Contact />
+        <Terminal />
+      </main>
+      <Footer />
+    </div>
+  );
+};
+
+export default Index;
+```
+
+```typescript name=src/components/Navigation.tsx
+import { useState, useEffect } from "react";
+import { Menu, X, Terminal } from "lucide-react";
+import { ThemeToggle } from "./ThemeToggle";
+
+const navItems = [
+  { label: "Services", href: "#services" },
+  { label: "Projects", href: "#projects" },
+  { label: "Skills", href: "#skills" },
+  { label: "About", href: "#about" },
+  { label:  "Contact", href:  "#contact" },
+];
+
+const Navigation = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleEscape = (e:  KeyboardEvent) => {
+      if (e.key === "Escape") setIsOpen(false);
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body. style.overflow = "";
+    };
+  }, [isOpen]);
+
+  return (
+    <nav
+      role="navigation"
+      aria-label="Main navigation"
+      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
+        scrolled ? "border-b border-border bg-background/80 backdrop-blur-lg" : "bg-transparent"
+      }`}
+    >
+      <div className="container">
+        <div className="flex h-16 items-center justify-between">
+          <a
+            href="#"
+            className="flex items-center gap-2 rounded-lg font-mono text-lg font-semibold focus:outline-none focus-visible:ring-2 focus-visible: ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            aria-label="Go to homepage"
+          >
+            <Terminal className="h-5 w-5 text-primary" aria-hidden="true" />
+            <span className="text-foreground">azizkhan</span>
+            <span className="text-primary">. dev</span>
+          </a>
+
+          <div className="hidden items-center gap-6 md:flex">
+            {navItems.map((item, index) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="group flex items-center gap-2 font-mono text-sm text-muted-foreground transition-colors hover:text-foreground focus:outline-none focus-visible:text-primary"
+              >
+                <span className="text-xs text-primary">0{index + 1}.</span>
+                <span className="transition-colors group-hover:text-primary">{item.label}</span>
+              </a>
+            ))}
+            <ThemeToggle />
+          </div>
+
+          <div className="flex items-center gap-2 md:hidden">
+            <ThemeToggle />
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="rounded-lg p-2 text-foreground transition-colors hover:bg-secondary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
+            >
+              {isOpen ? (
+                <X className="h-5 w-5" aria-hidden="true" />
+              ) : (
+                <Menu className="h-5 w-5" aria-hidden="true" />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {isOpen && (
+          <div
+            id="mobile-menu"
+            className="animate-fade-in border-t border-border py-4 md:hidden"
+            role="menu"
+          >
+            <div className="flex flex-col gap-2">
+              {navItems.map((item, index) => (
+                <a
+                  key={item.href}
+                  href={item. href}
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center gap-2 rounded-lg px-2 py-3 font-mono text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus:outline-none focus-visible:bg-secondary focus-visible:text-primary"
+                  role="menuitem"
+                >
+                  <span className="text-xs text-primary">0{index + 1}.</span>
+                  <span>{item.label}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </nav>
+  );
+};
+
+export default Navigation;
+```
+
+```typescript name=src/components/Hero.tsx
+import { Github, Linkedin, Send, MapPin } from "lucide-react";
+import { siteConfig } from "@/content/siteConfig";
+
+const Hero = () => {
+  return (
+    <section
+      className="relative flex min-h-screen items-center justify-center overflow-hidden"
+      aria-labelledby="hero-heading"
+    >
+      <div className="absolute inset-0 grid-pattern opacity-50" aria-hidden="true" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background" />
+
+      <div className="container relative z-10 py-20">
+        <div className="mx-auto max-w-4xl">
+          <div className="mb-8 inline-flex animate-fade-in items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-2">
+            <span className="relative flex h-2. 5 w-2.5">
+              <span className="status-pulse absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary"></span>
+            </span>
+            <span className="font-mono text-sm text-primary">Status:  {siteConfig.status}</span>
+          </div>
+
+          <h1
+            id="hero-heading"
+            className="mb-4 animate-fade-in font-mono text-5xl font-bold opacity-0 delay-100 md:text-7xl"
+          >
+            <span className="text-foreground">{siteConfig. name. split(" ")[0]}</span>
+            <span className="text-primary"> {siteConfig.name.split(" ")[1]}</span>
+          </h1>
+
+          <h2 className="mb-6 animate-fade-in font-mono text-xl text-muted-foreground opacity-0 delay-200 md:text-2xl">
+            <span className="text-primary">&gt;</span> {siteConfig. title}{" "}
+            <span className="text-primary">|</span> {siteConfig.tagline}
+          </h2>
+
+          <p className="mb-8 max-w-2xl animate-fade-in text-lg leading-relaxed text-muted-foreground opacity-0 delay-300 md: text-xl">
+            {siteConfig.description}
+          </p>
+
+          <div className="mb-8 flex animate-fade-in items-center gap-2 text-muted-foreground opacity-0 delay-400">
+            <MapPin className="h-4 w-4 text-primary" aria-hidden="true" />
+            <span className="font-mono text-sm">{siteConfig. location}</span>
+          </div>
+
+          <div className="flex animate-fade-in flex-wrap gap-4 opacity-0 delay-500">
+            <a
+              href={siteConfig.social.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-3 transition-all duration-300 hover:border-primary/50 hover:bg-primary/5"
+              aria-label="View GitHub profile"
+            >
+              <Github
+                className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-primary"
+                aria-hidden="true"
+              />
+              <span className="font-mono text-sm">GitHub</span>
+            </a>
+            <a
+              href={siteConfig.social.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-3 transition-all duration-300 hover:border-primary/50 hover:bg-primary/5"
+              aria-label="View LinkedIn profile"
+            >
+              <Linkedin
+                className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-primary"
+                aria-hidden="true"
+              />
+              <span className="font-mono text-sm">LinkedIn</span>
+            </a>
+            <a
+              href={siteConfig.social.telegram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-3 transition-all duration-300 hover:border-primary/50 hover:bg-primary/5"
+              aria-label="Contact on Telegram"
+            >
+              <Send
+                className="h-5 w-5 text-muted-foreground transition-colors group-hover: text-primary"
+                aria-hidden="true"
+              />
+              <span className="font-mono text-sm">Telegram</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Hero;
+```
+
+```typescript name=src/components/Services.tsx
+import { services } from "@/content/services";
+
+const Services = () => {
+  return (
+    <section id="services" className="relative py-24" aria-labelledby="services-heading">
+      <div className="container">
+        <div className="mb-16">
+          <div className="mb-4 flex items-center gap-3">
+            <span className="font-mono text-sm text-primary">01. </span>
+            <h2 id="services-heading" className="font-mono text-3xl font-bold md:text-4xl">
+              Services
+            </h2>
+          </div>
+          <div className="h-px max-w-md bg-gradient-to-r from-primary/50 via-border to-transparent" />
+          <p className="mt-4 max-w-2xl text-muted-foreground">
+            Specialized backend development services focused on building scalable, maintainable, and
+            secure applications. 
+          </p>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          {services.map((service, index) => {
+            const Icon = service.icon;
+            return (
+              <article
+                key={service. id}
+                className="animate-fade-in group rounded-lg border border-border bg-card p-6 opacity-0 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="mb-4 flex items-start gap-4">
+                  <div className="rounded-lg bg-primary/10 p-3 text-primary">
+                    <Icon className="h-6 w-6" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <h3 className="font-mono text-xl font-semibold transition-colors group-hover:text-primary">
+                      {service.title}
+                    </h3>
+                  </div>
+                </div>
+                <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
+                  {service.description}
+                </p>
+                <ul className="grid grid-cols-2 gap-2" role="list">
+                  {service.features.map((feature) => (
+                    <li
+                      key={feature}
+                      className="flex items-center gap-2 text-sm text-muted-foreground"
+                    >
+                      <span className="text-primary" aria-hidden="true">
+                        ▹
+                      </span>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Services;
+```
+
+```typescript name=src/components/Projects.tsx
+import { ExternalLink, Github } from "lucide-react";
+import { projects, type Project } from "@/content/projects";
+
+const Projects = () => {
+  return (
+    <section id="projects" className="relative py-24" aria-labelledby="projects-heading">
+      <div className="container">
+        <div className="mb-16">
+          <div className="mb-4 flex items-center gap-3">
+            <span className="font-mono text-sm text-primary">02.</span>
+            <h2 id="projects-heading" className="font-mono text-3xl font-bold md:text-4xl">
+              Featured Projects
+            </h2>
+          </div>
+          <div className="h-px max-w-md bg-gradient-to-r from-primary/50 via-border to-transparent" />
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {projects.map((project, index) => (
+            <ProjectCard key={project. id} project={project} index={index} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const ProjectCard = ({ project, index }: { project: Project; index: number }) => {
+  const Icon = project.icon;
+
+  return (
+    <article
+      className="animate-fade-in card-hover group relative flex flex-col rounded-lg border border-border bg-card p-6 opacity-0"
+      style={{ animationDelay: `${index * 100}ms` }}
+    >
+      <div className="mb-4 flex items-start justify-between">
+        <div className="rounded-lg bg-primary/10 p-3 text-primary">
+          <Icon className="h-6 w-6" aria-hidden="true" />
+        </div>
+        <div className="flex gap-2">
+          {project.github && (
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-lg p-2 text-muted-foreground transition-all hover:bg-primary/10 hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible: ring-primary"
+              aria-label={`View ${project.title} on GitHub`}
+            >
+              <Github className="h-5 w-5" aria-hidden="true" />
+            </a>
+          )}
+          {project. demo && (
+            <a
+              href={project.demo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-lg p-2 text-muted-foreground transition-all hover:bg-primary/10 hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              aria-label={`View ${project.title} demo`}
+            >
+              <ExternalLink className="h-5 w-5" aria-hidden="true" />
+            </a>
+          )}
+        </div>
+      </div>
+
+      <h3 className="mb-2 font-mono text-xl font-semibold transition-colors group-hover:text-primary">
+        {project. title}
+      </h3>
+
+      <p className="mb-3 font-mono text-sm text-primary">{project.subtitle}</p>
+
+      <p className="mb-4 flex-grow text-sm leading-relaxed text-muted-foreground">
+        {project. description}
+      </p>
+
+      <div className="mb-4 max-h-0 space-y-1. 5 overflow-hidden opacity-0 transition-all duration-300 group-hover:max-h-48 group-hover:opacity-100">
+        {project.highlights.slice(0, 4).map((highlight) => (
+          <div key={highlight} className="flex items-center gap-2 text-xs text-muted-foreground">
+            <span className="text-primary" aria-hidden="true">
+              ▹
+            </span>
+            {highlight}
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-auto flex flex-wrap gap-2 border-t border-border pt-4">
+        {project.techStack.map((tech) => (
+          <span
+            key={tech}
+            className="rounded border border-primary/20 bg-primary/5 px-2 py-1 font-mono text-xs text-primary/80"
+          >
+            {tech}
+          </span>
+        ))}
+      </div>
+    </article>
+  );
+};
+
+export default Projects;
+```
+
+```typescript name=src/components/Skills.tsx
+import { Code2, Layers, Database, Lightbulb } from "lucide-react";
+
+interface SkillCategory {
+  title: string;
+  icon: React.ReactNode;
+  skills: string[];
+  size:  "large" | "medium" | "small";
+}
+
+const skillCategories: SkillCategory[] = [
+  {
+    title: "Languages",
+    icon:  <Code2 className="h-5 w-5" />,
+    skills: ["Java 17/21", "Core Java", "Stream API", "Multithreading", "JavaScript"],
+    size:  "large",
+  },
+  {
+    title: "Frameworks",
+    icon: <Layers className="h-5 w-5" />,
+    skills:  ["Spring Boot 3.3", "Spring Security", "Spring Data JPA", "Spring Cloud", "Spring MVC"],
+    size: "large",
+  },
+  {
+    title: "Infrastructure",
+    icon:  <Database className="h-5 w-5" />,
+    skills: ["Docker", "PostgreSQL", "Apache Kafka", "Redis", "Maven"],
+    size:  "medium",
+  },
+  {
+    title: "Concepts",
+    icon:  <Lightbulb className="h-5 w-5" />,
+    skills: ["REST API", "SOLID", "JWT", "Microservices", "CQRS", "Event-Driven"],
+    size: "medium",
+  },
+];
+
+const Skills = () => {
+  return (
+    <section id="skills" className="relative py-24" aria-labelledby="skills-heading">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.02] to-transparent" />
+
+      <div className="container relative">
+        <div className="mb-16">
+          <div className="mb-4 flex items-center gap-3">
+            <span className="font-mono text-sm text-primary">03.</span>
+            <h2 id="skills-heading" className="font-mono text-3xl font-bold md:text-4xl">
+              Skills & Technologies
+            </h2>
+          </div>
+          <div className="h-px max-w-md bg-gradient-to-r from-primary/50 via-border to-transparent" />
+        </div>
+
+        <div className="grid auto-rows-fr grid-cols-1 gap-4 md:grid-cols-2 lg: grid-cols-4">
+          {skillCategories.map((category, index) => (
+            <SkillCard key={category.title} category={category} index={index} />
+          ))}
+        </div>
+
+        <div className="mt-8 rounded-lg border border-border bg-card/50 p-6">
+          <h4 className="mb-4 font-mono text-sm text-primary">// Also experienced with</h4>
+          <div className="flex flex-wrap gap-3">
+            {[
+              "Netflix Eureka",
+              "Spring Cloud Gateway",
+              "Feign Client",
+              "Saga Pattern",
+              "Pessimistic Locking",
+              "JWT Authentication",
+              "Event-Driven Architecture",
+              "Docker Compose",
+            ].map((tech) => (
+              <span
+                key={tech}
+                className="rounded-lg border border-border px-3 py-1.5 font-mono text-sm text-muted-foreground transition-colors hover:border-primary/30 hover:text-foreground"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const SkillCard = ({ category, index }: { category:  SkillCategory; index: number }) => {
+  const sizeClasses = {
+    large: "lg:col-span-2 lg:row-span-2",
+    medium: "lg:col-span-2",
+    small: "",
+  };
+
+  return (
+    <div
+      className={`animate-fade-in card-hover rounded-lg border border-border bg-card p-6 opacity-0 ${sizeClasses[category.size]}`}
+      style={{ animationDelay:  `${index * 100}ms` }}
+    >
+      <div className="mb-6 flex items-center gap-3">
+        <div className="rounded-lg bg-primary/10 p-2 text-primary">{category.icon}</div>
+        <h3 className="font-mono text-lg font-semibold">{category.title}</h3>
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        {category. skills.map((skill) => (
+          <div
+            key={skill}
+            className="group relative cursor-default rounded-lg border border-border bg-secondary px-3 py-2 transition-all hover:border-primary/50"
+          >
+            <span className="font-mono text-sm text-foreground transition-colors group-hover:text-primary">
+              {skill}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Skills;
+```
+
+```typescript name=src/components/About.tsx
+import { GraduationCap, Globe, MapPin, Calendar, Heart, Coffee } from "lucide-react";
+
+const About = () => {
+  return (
+    <section id="about" className="relative py-24" aria-labelledby="about-heading">
+      <div className="container">
+        <div className="mb-16">
+          <div className="mb-4 flex items-center gap-3">
+            <span className="font-mono text-sm text-primary">04.</span>
+            <h2 id="about-heading" className="font-mono text-3xl font-bold md:text-4xl">
+              About Me
+            </h2>
+          </div>
+          <div className="h-px max-w-md bg-gradient-to-r from-primary/50 via-border to-transparent" />
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <article className="animate-fade-in card-hover rounded-lg border border-border bg-card p-6 opacity-0 lg:col-span-2">
+            <div className="flex items-start gap-4">
+              <div className="rounded-lg bg-primary/10 p-3 text-primary">
+                <GraduationCap className="h-6 w-6" aria-hidden="true" />
+              </div>
+              <div className="flex-1">
+                <h3 className="mb-2 font-mono text-xl font-semibold">
+                  International Ataturk-Alatoo University
+                </h3>
+                <p className="mb-2 font-mono text-sm text-primary">Computer Engineering</p>
+                <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-1. 5">
+                    <Calendar className="h-4 w-4" aria-hidden="true" />
+                    <span>2023 - 2027</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <MapPin className="h-4 w-4" aria-hidden="true" />
+                    <span>Bishkek, Kyrgyzstan</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article
+            className="animate-fade-in card-hover rounded-lg border border-border bg-card p-6 opacity-0"
+            style={{ animationDelay: "100ms" }}
+          >
+            <div className="mb-4 flex items-center gap-3">
+              <div className="rounded-lg bg-primary/10 p-2 text-primary">
+                <Globe className="h-5 w-5" aria-hidden="true" />
+              </div>
+              <h3 className="font-mono text-lg font-semibold">Languages</h3>
+            </div>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-foreground">Russian</span>
+                <span className="rounded bg-primary/10 px-2 py-1 font-mono text-xs text-primary">
+                  Native
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-foreground">English</span>
+                <span className="rounded bg-secondary px-2 py-1 font-mono text-xs text-muted-foreground">
+                  B1 - Technical
+                </span>
+              </div>
+            </div>
+          </article>
+
+          <article
+            className="animate-fade-in card-hover rounded-lg border border-border bg-card p-6 opacity-0 lg:col-span-3"
+            style={{ animationDelay:  "200ms" }}
+          >
+            <div className="mb-4 flex items-center gap-3">
+              <div className="rounded-lg bg-primary/10 p-2 text-primary">
+                <Heart className="h-5 w-5" aria-hidden="true" />
+              </div>
+              <h3 className="font-mono text-lg font-semibold">What Drives Me</h3>
+            </div>
+            <p className="leading-relaxed text-muted-foreground">
+              I'm passionate about building robust, scalable backend systems that solve real-world
+              problems. My focus is on clean architecture, maintainable code, and continuous
+              learning. When I'm not coding, you'll find me exploring new technologies, contributing
+              to open source, or enjoying a good cup of{" "}
+              <Coffee className="inline-block h-4 w-4 text-primary" aria-hidden="true" /> coffee.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default About;
+```
+
+```typescript name=src/components/Contact.tsx
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Send, Loader2, CheckCircle, AlertCircle, Mail, MapPin } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { siteConfig } from "@/content/siteConfig";
+
+const contactSchema = z.object({
+  name:  z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  subject: z.string().min(5, "Subject must be at least 5 characters"),
+  message: z.string().min(20, "Message must be at least 20 characters"),
+});
+
+type ContactFormData = z.infer<typeof contactSchema>;
+
+type FormStatus = "idle" | "submitting" | "success" | "error";
+
+const Contact = () => {
+  const [status, setStatus] = useState<FormStatus>("idle");
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ContactFormData>({
+    resolver:  zodResolver(contactSchema),
+  });
+
+  const onSubmit = async (data: ContactFormData) => {
+    setStatus("submitting");
+
+    try {
+      const mailtoLink = `mailto:${siteConfig.email}?subject=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(`From: ${data.name} (${data.email})\n\n${data.message}`)}`;
+      window.location.href = mailtoLink;
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setStatus("success");
+      reset();
+
+      setTimeout(() => setStatus("idle"), 3000);
+    } catch {
+      setStatus("error");
+      setTimeout(() => setStatus("idle"), 3000);
+    }
+  };
+
+  return (
+    <section id="contact" className="relative py-24" aria-labelledby="contact-heading">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.02] to-transparent" />
+
+      <div className="container relative">
+        <div className="mb-16 text-center">
+          <div className="mb-4 inline-flex items-center gap-3">
+            <span className="font-mono text-sm text-primary">05.</span>
+            <h2 id="contact-heading" className="font-mono text-3xl font-bold md:text-4xl">
+              Get In Touch
+            </h2>
+          </div>
+          <div className="mx-auto h-px max-w-xs bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+          <p className="mx-auto mt-4 max-w-lg text-muted-foreground">
+            I'm currently looking for new opportunities.  Whether you have a question or just want to
+            say hi, I'll try my best to get back to you! 
+          </p>
+        </div>
+
+        <div className="mx-auto grid max-w-4xl gap-8 lg:grid-cols-5">
+          <div className="space-y-6 lg:col-span-2">
+            <div className="animate-fade-in rounded-lg border border-border bg-card p-6 opacity-0">
+              <h3 className="mb-4 font-mono text-lg font-semibold">Contact Info</h3>
+              <div className="space-y-4">
+                <a
+                  href={`mailto:${siteConfig.email}`}
+                  className="flex items-center gap-3 text-muted-foreground transition-colors hover:text-primary focus:outline-none focus-visible:text-primary"
+                >
+                  <Mail className="h-5 w-5 text-primary" aria-hidden="true" />
+                  <span className="text-sm">{siteConfig. email}</span>
+                </a>
+                <div className="flex items-center gap-3 text-muted-foreground">
+                  <MapPin className="h-5 w-5 text-primary" aria-hidden="true" />
+                  <span className="text-sm">{siteConfig.location}</span>
+                </div>
+              </div>
+            </div>
+
+            <div
+              className="animate-fade-in rounded-lg border border-border bg-card p-6 opacity-0"
+              style={{ animationDelay: "100ms" }}
+            >
+              <h3 className="mb-4 font-mono text-lg font-semibold">Social Links</h3>
+              <div className="flex gap-3">
+                <a
+                  href={siteConfig.social. github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-lg border border-border p-3 text-muted-foreground transition-all hover:border-primary/50 hover: bg-primary/5 hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  aria-label="GitHub"
+                >
+                  <svg
+                    className="h-5 w-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-. 217.682-.483 0-.237-. 008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-. 608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 . 84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c. 85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 . 268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </a>
+                <a
+                  href={siteConfig.social. linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-lg border border-border p-3 text-muted-foreground transition-all hover:border-primary/50 hover:bg-primary/5 hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  aria-label="LinkedIn"
+                >
+                  <svg
+                    className="h-5 w-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path d="M20. 447 20.452h-3.554v-5.569c0-1.328-.027-3. 037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h. 046c.477-. 9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138. 92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 . 774 23.2 0 22.222 0h.003z" />
+                  </svg>
+                </a>
+                <a
+                  href={siteConfig.social.telegram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-lg border border-border p-3 text-muted-foreground transition-all hover:border-primary/50 hover:bg-primary/5 hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  aria-label="Telegram"
+                >
+                  <Send className="h-5 w-5" aria-hidden="true" />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div
+            className="animate-fade-in rounded-lg border border-border bg-card p-6 opacity-0 lg:col-span-3"
+            style={{ animationDelay: "200ms" }}
+          >
+            <form onSubmit={handleSubmit
