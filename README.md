@@ -1,6 +1,6 @@
 # 🚀 Azizkhan's Dev Studio
 
-[![CI](https://github.com/AzizKhanC/azizkhan-s-dev-studio/actions/workflows/ci.yml/badge.svg)](https://github.com/AzizKhanC/azizkhan-s-dev-studio/actions/workflows/ci.yml)
+[![CI](https://github.com/Hanchik8/azizkhan-s-dev-studio/actions/workflows/ci.yml/badge.svg)](https://github.com/Hanchik8/azizkhan-s-dev-studio/actions/workflows/ci.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
