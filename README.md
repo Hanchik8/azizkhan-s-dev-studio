@@ -1,4 +1,4 @@
-# 🚀 Azizkhan's Dev Studio
+# Azizkhan's Dev Studio
 
 [![CI](https://github.com/Hanchik8/azizkhan-s-dev-studio/actions/workflows/ci.yml/badge.svg)](https://github.com/Hanchik8/azizkhan-s-dev-studio/actions/workflows/ci.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -7,20 +7,26 @@
 [![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
-> Personal developer portfolio showcasing my projects, skills, and experience as a Full-Stack Developer.
+> Portfolio website presenting projects, skills, and professional experience as a Full-Stack Developer.
 
-**🌐 Live Demo:** [azizkhan.dev](https://azizkhan.dev)
+**Live Site:** [azizkhan.dev](https://azizkhan.dev)
 
-## ✨ Features
+## Features
 
-- 🎨 **Modern Design** — Clean, terminal-inspired aesthetic with smooth animations
-- 🌓 **Dark/Light Theme** — Toggle between themes with persistent preference
-- 📱 **Fully Responsive** — Optimized for all screen sizes
-- ⚡ **Fast Performance** — Built with Vite for lightning-fast load times
-- ♿ **Accessible** — WCAG-compliant with semantic HTML and ARIA labels
-- 🔍 **SEO Optimized** — Meta tags, Open Graph, and JSON-LD structured data
+- **Modern Design** — Clean, terminal-inspired aesthetic with smooth animations
+- **Dark/Light Theme** — Toggle between themes with persistent preference
+- **Fully Responsive** — Optimized for all screen sizes
+- **Fast Performance** — Built with Vite for fast load times
+- **Accessible** — WCAG-compliant with semantic HTML and ARIA labels
+- **SEO Optimized** — Meta tags, Open Graph, and JSON-LD structured data
 
-## 🛠️ Tech Stack
+## Screenshots
+
+![Homepage hero](docs/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202026-01-23%20165314.png)
+![Services and projects](docs/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202026-01-23%20165340.png)
+![Contact and footer](docs/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202026-01-23%20165420.png)
+
+## Tech Stack
 
 | Category | Technologies |
 |----------|-------------|
@@ -33,7 +39,7 @@
 | **Code Quality** | ESLint, Prettier, EditorConfig |
 | **CI/CD** | GitHub Actions |
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/
@@ -58,7 +64,7 @@ src/
 └── test/             # Test files
 ```
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -83,7 +89,7 @@ bun dev
 
 The app will be available at `http://localhost:8080`
 
-## 📜 Available Scripts
+## Available Scripts
 
 | Script | Description |
 |--------|-------------|
@@ -98,7 +104,7 @@ The app will be available at `http://localhost:8080`
 | `bun format:check` | Check code formatting |
 | `bun typecheck` | Run TypeScript type checking |
 
-## 🧪 Testing
+## Testing
 
 ```bash
 # Run all tests
@@ -111,7 +117,7 @@ bun test -- --watch
 bun test:coverage
 ```
 
-## 🚢 Deployment
+## Deployment
 
 The site is deployed automatically on push to `main` branch. For manual deployment:
 
@@ -131,7 +137,7 @@ Works with any static hosting:
 - GitHub Pages
 - Cloudflare Pages
 
-## 📝 Configuration
+## Configuration
 
 ### Site Config
 
@@ -149,11 +155,11 @@ Add or modify projects in `src/content/projects.ts`
 
 Update services in `src/content/services.ts`
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License — see the [LICENSE](./LICENSE) file for details.
 
-## 👤 Author
+## Author
 
 **Azizkhan Nurlanov**
 
@@ -165,5 +171,5 @@ This project is licensed under the MIT License — see the [LICENSE](./LICENSE) 
 ---
 
 <p align="center">
-  Built with ❤️ and ☕ in Bishkek, Kyrgyzstan
+  Built in Bishkek, Kyrgyzstan.
 </p>
