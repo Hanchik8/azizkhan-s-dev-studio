@@ -1,21 +1,5 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-
-type Theme = "dark" | "light" | "system";
-
-interface ThemeContextType {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
-  resolvedTheme: "dark" | "light";
-}
-
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
-
-const STORAGE_KEY = "azizkhan-dev-theme";
-
-function getSystemTheme(): "dark" | "light" {
-  if (typeof window === "undefined") return "dark";
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-}
+import { useEffect, useState, type ReactNode } from "react";
+import { ThemeContext, getSystemTheme, STORAGE_KEY, type Theme } from "./theme-context";
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(() => {
@@ -55,12 +39,4 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       {children}
     </ThemeContext.Provider>
   );
-}
-
-export function useTheme() {
-  const context = useContext(ThemeContext);
-  if (context === undefined) {
-    throw new Error("useTheme must be used within a ThemeProvider");
-  }
-  return context;
 }

@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { ThemeProvider, useTheme } from "../components/ThemeProvider";
+import { ThemeProvider } from "../components/ThemeProvider";
+import { useTheme } from "../components/theme-context";
 
 // Test component to access theme context
 const TestComponent = () => {

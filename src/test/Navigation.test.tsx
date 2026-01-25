@@ -31,10 +31,7 @@ describe("Navigation", () => {
 
   it("has accessible navigation role", () => {
     render(<Navigation />);
-    expect(screen.getByRole("navigation")).toHaveAttribute(
-      "aria-label",
-      "Main navigation"
-    );
+    expect(screen.getByRole("navigation")).toHaveAttribute("aria-label", "Main navigation");
   });
 
   it("toggles mobile menu on button click", () => {

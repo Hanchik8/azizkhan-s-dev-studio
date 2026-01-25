@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -103,27 +103,32 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Inter', sans-serif;
+    @apply bg-background font-sans text-foreground antialiased;
+    font-family: "Inter", sans-serif;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'JetBrains Mono', monospace;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "JetBrains Mono", monospace;
   }
 }
 
 @layer components {
   .font-mono {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
   }
 
   .font-sans {
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
   }
 
   /* Grid background pattern */
   .grid-pattern {
-    background-image: 
+    background-image:
       linear-gradient(to right, hsl(var(--grid-color) / 0.3) 1px, transparent 1px),
       linear-gradient(to bottom, hsl(var(--grid-color) / 0.3) 1px, transparent 1px);
     background-size: 40px 40px;
@@ -131,19 +136,27 @@
 
   /* Subtle glow effect */
   .glow-primary {
-    box-shadow: 0 0 20px hsl(var(--primary) / 0.3),
-                0 0 40px hsl(var(--primary) / 0.1);
+    box-shadow:
+      0 0 20px hsl(var(--primary) / 0.3),
+      0 0 40px hsl(var(--primary) / 0.1);
   }
 
   .glow-text {
-    text-shadow: 0 0 10px hsl(var(--primary) / 0.5),
-                 0 0 20px hsl(var(--primary) / 0.3);
+    text-shadow:
+      0 0 10px hsl(var(--primary) / 0.5),
+      0 0 20px hsl(var(--primary) / 0.3);
   }
 
   /* Terminal cursor blink */
   @keyframes blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
+    0%,
+    50% {
+      opacity: 1;
+    }
+    51%,
+    100% {
+      opacity: 0;
+    }
   }
 
   .cursor-blink {
@@ -152,14 +165,24 @@
 
   /* Terminal typing effect */
   @keyframes typing {
-    from { width: 0; }
-    to { width: 100%; }
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
   }
 
   /* Fade in animation */
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .animate-fade-in {
@@ -167,20 +190,36 @@
   }
 
   /* Stagger delays */
-  .delay-100 { animation-delay: 100ms; }
-  .delay-200 { animation-delay: 200ms; }
-  .delay-300 { animation-delay: 300ms; }
-  .delay-400 { animation-delay: 400ms; }
-  .delay-500 { animation-delay: 500ms; }
+  .delay-100 {
+    animation-delay: 100ms;
+  }
+  .delay-200 {
+    animation-delay: 200ms;
+  }
+  .delay-300 {
+    animation-delay: 300ms;
+  }
+  .delay-400 {
+    animation-delay: 400ms;
+  }
+  .delay-500 {
+    animation-delay: 500ms;
+  }
 
   /* Status pulse */
   @keyframes pulse-ring {
-    0% { transform: scale(1); opacity: 1; }
-    100% { transform: scale(1.5); opacity: 0; }
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
   }
 
   .status-pulse::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     border-radius: 9999px;
@@ -195,8 +234,9 @@
 
   .card-hover:hover {
     @apply border-primary/50;
-    box-shadow: 0 0 30px hsl(var(--primary) / 0.15),
-                inset 0 1px 0 hsl(var(--primary) / 0.1);
+    box-shadow:
+      0 0 30px hsl(var(--primary) / 0.15),
+      inset 0 1px 0 hsl(var(--primary) / 0.1);
   }
 
   /* Terminal line highlight */
@@ -205,13 +245,13 @@
   }
 
   .terminal-line::before {
-    content: '>';
-    @apply absolute left-0 text-primary font-mono;
+    content: ">";
+    @apply absolute left-0 font-mono text-primary;
   }
 
   /* Scanline effect */
   .scanlines::after {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     background: repeating-linear-gradient(
@@ -231,11 +271,7 @@
   }
 
   .border-gradient {
-    border-image: linear-gradient(
-      to right,
-      hsl(var(--primary) / 0.5),
-      hsl(var(--primary) / 0.1)
-    ) 1;
+    border-image: linear-gradient(to right, hsl(var(--primary) / 0.5), hsl(var(--primary) / 0.1)) 1;
   }
 }
 

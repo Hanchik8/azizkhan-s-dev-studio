@@ -1,5 +1,5 @@
 import { Moon, Sun, Monitor } from "lucide-react";
-import { useTheme } from "./ThemeProvider";
+import { useTheme } from "./theme-context";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -27,7 +27,7 @@ export function ThemeToggle() {
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-card border-border">
+      <DropdownMenuContent align="end" className="border-border bg-card">
         <DropdownMenuItem
           onClick={() => setTheme("light")}
           className={`cursor-pointer ${theme === "light" ? "text-primary" : ""}`}

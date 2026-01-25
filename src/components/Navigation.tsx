@@ -41,47 +41,47 @@ const Navigation = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-background/80 backdrop-blur-lg border-b border-border" : "bg-transparent"
+      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
+        scrolled ? "border-b border-border bg-background/80 backdrop-blur-lg" : "bg-transparent"
       }`}
       role="navigation"
       aria-label="Main navigation"
     >
       <div className="container">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <a href="#" className="flex items-center gap-2 font-mono text-lg font-semibold">
-            <Terminal className="w-5 h-5 text-primary" aria-hidden="true" />
+            <Terminal className="h-5 w-5 text-primary" aria-hidden="true" />
             <span className="text-foreground">azizkhan</span>
             <span className="text-primary">.dev</span>
           </a>
 
           {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden items-center gap-8 md:flex">
             {navItems.map((item, index) => (
               <a
                 key={item.href}
                 href={item.href}
-                className="group flex items-center gap-2 font-mono text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className="group flex items-center gap-2 font-mono text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
-                <span className="text-primary text-xs">0{index + 1}.</span>
-                <span className="group-hover:text-primary transition-colors">{item.label}</span>
+                <span className="text-xs text-primary">0{index + 1}.</span>
+                <span className="transition-colors group-hover:text-primary">{item.label}</span>
               </a>
             ))}
             <ThemeToggle />
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden flex items-center gap-2">
+          <div className="flex items-center gap-2 md:hidden">
             <ThemeToggle />
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-lg text-foreground hover:bg-secondary transition-colors"
+              className="rounded-lg p-2 text-foreground transition-colors hover:bg-secondary"
               aria-label={isOpen ? "Close menu" : "Open menu"}
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
             >
-              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
         </div>
@@ -90,7 +90,7 @@ const Navigation = () => {
         {isOpen && (
           <div
             id="mobile-menu"
-            className="md:hidden py-4 border-t border-border animate-fade-in"
+            className="animate-fade-in border-t border-border py-4 md:hidden"
             role="menu"
           >
             <div className="flex flex-col gap-4">
@@ -99,10 +99,10 @@ const Navigation = () => {
                   key={item.href}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center gap-2 font-mono text-sm text-muted-foreground hover:text-foreground transition-colors py-2"
+                  className="flex items-center gap-2 py-2 font-mono text-sm text-muted-foreground transition-colors hover:text-foreground"
                   role="menuitem"
                 >
-                  <span className="text-primary text-xs">0{index + 1}.</span>
+                  <span className="text-xs text-primary">0{index + 1}.</span>
                   <span>{item.label}</span>
                 </a>
               ))}
